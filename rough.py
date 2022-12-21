@@ -1,18 +1,19 @@
 import face_recognition
 import cv2
-import os
 
-files = os.listdir('faces')
-print(files)
-'''
-img = cv2.imread('faces/cum.jpg')
-cum = face_recognition.face_encodings(img)[0]
+img = cv2.VideoCapture(0)
+ret, frame = img.read()
 
-rec = cv2.VideoCapture(0)
-ret, frame = rec.read()
+landmarks = face_recognition.face_landmarks(frame)[0]
 
-unknown = face_recognition.face_encodings(frame)[0]
-#print(unknown[0])
-result = face_recognition.compare_faces([cum],unknown)
-print(result)
-'''
+points = landmarks['chin'] + landmarks['top_lip'] + landmarks['bottom_lip']
+
+for point in points:
+    cv2.circle(frame,point,1,(0,255,0))
+
+cv2.imshow('Camera', frame)
+cv2.waitKey(0)
+
+
+print(landmarks)
+
