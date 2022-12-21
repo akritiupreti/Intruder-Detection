@@ -64,3 +64,4 @@ else:
 
 rec.release()
 cv2.destroyAllWindows()
+print("Done!")
