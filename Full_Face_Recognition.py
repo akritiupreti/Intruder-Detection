@@ -1,6 +1,7 @@
 import cv2
 import face_recognition
 import os
+import sendEmail
 
 rec = cv2.VideoCapture(0)
 photos = os.listdir('faces')
@@ -9,6 +10,8 @@ result = False
 name = ""
 unknown = []
 frame = []
+isHome = True
+
 
 # when motion is detected, camera opens
 while len(unknown) == 0:
@@ -40,8 +43,24 @@ for photo in photos:
 
 if result:
     print('Hello ' + name + '!')
+    print("Open gate")
 else:
-    print('ALARM BAJAIDIYO')
+    cv2.imwrite('intruder/intruder.jpg', frame) #saves image in intruder folder to send via email
+    sendEmail.run()
+    if isHome:
+        friendly = input('Do you know this person? (Y/N): ')
+        if friendly.upper() == 'Y':
+            answer = input('Do you want to register this person? (Y/N): ')
+            if answer.upper() == 'Y':
+                new_name = input("Enter the person's name: ")
+                new_name = 'faces/' + new_name + '.jpg'
+                cv2.imwrite(new_name, frame)
+
+            print('Open gate')
+        else:
+            print('Gate is still closed')
+    else:
+        print('Alarm bajaidiyo')
 
 rec.release()
 cv2.destroyAllWindows()
