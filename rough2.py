@@ -3,7 +3,7 @@ import face_recognition
 import os
 import sendEmail
 
-rec = cv2.VideoCapture(0)
+rec = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 photos = os.listdir('faces')
 
 result = False
@@ -64,4 +64,3 @@ else:
 
 rec.release()
 cv2.destroyAllWindows()
-print("Done!")
