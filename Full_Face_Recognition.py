@@ -2,6 +2,9 @@ import cv2
 import face_recognition
 import os
 import sendEmail
+import detect_mask
+import time
+
 
 rec = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 photos = os.listdir('faces')
@@ -18,10 +21,15 @@ while len(unknown) == 0:
     ret, frame = rec.read()
 
     cv2.imshow('Camera', frame)
+
     try:    # if no face is detected after camera opens, keep camera ON
         unknown = face_recognition.face_encodings(frame)[0] # when face is detected, unknown is not empty, so loop ends
+        print("face detected")
     except:
-        pass
+        if detect_mask.detect(frame):
+            print("Please remove your mask/helmet")
+            #time.sleep(5)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
