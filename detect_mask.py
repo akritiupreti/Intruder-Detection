@@ -15,7 +15,7 @@ def detect(frame):
     score = tf.nn.softmax(predictions[0])
 
     confidence = np.max(score)*100
-    if confidence > 70:
+    if confidence >= 99:
         return True
 
     return False
