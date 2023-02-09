@@ -20,22 +20,23 @@ isHome = True
 while len(unknown) == 0:
     ret, frame = rec.read()
 
-    cv2.imshow('Camera', frame)
-
     try:    # if no face is detected after camera opens, keep camera ON
         unknown = face_recognition.face_encodings(frame)[0] # when face is detected, unknown is not empty, so loop ends
         print("face detected")
     except:
         if detect_mask.detect(frame):
-            print("Please remove your mask/helmet")
-            #time.sleep(5)
+            for x in range(5,0,-1):
+                print("Please remove your mask/helmet in", x)
+                time.sleep(1)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    #if cv2.waitKey(1) & 0xFF == ord('q'):
+    #    break
 
-cv2.destroyAllWindows()
+
 cv2.imshow('Face', frame) # Display face of intruder
+time.sleep(5)
 cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 # now, compare the unknown face with the registered known faces
 for photo in photos:
