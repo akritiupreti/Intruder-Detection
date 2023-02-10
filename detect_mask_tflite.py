@@ -31,7 +31,7 @@ def detect(frame):
     score = model.get_tensor(output_details[scores_idx]['index'])[0]
     confidence = np.max(score)*100
 
-    if confidence > 80:
+    if confidence >= 99:
         return True
 
     return False
