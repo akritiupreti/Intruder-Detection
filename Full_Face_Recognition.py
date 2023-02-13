@@ -14,21 +14,22 @@ name = ""
 unknown = []
 isHome = False
 
-
 # when motion is detected, camera opens
 ret, frame = rec.read()
 detected = detect_mask.detect(frame)
 if detected:
+    rec.release()
     for sec in range(5, 0, -1):
         print("Please remove your mask/helmet in", sec)
         time.sleep(1)
 
+    rec = cv2.VideoCapture(0)
     ret, frame = rec.read()
     detected = detect_mask.detect(frame)
 
     if detected:
         print("Alarm bajaidyo")  # after making the code into a function so that main.py can import, add 'return 1' here to sound the alarm
-        quit() # remove this after adding return 1
+        quit()  # remove this after adding return 1
 
 while len(unknown) == 0:
     ret, frame = rec.read()
@@ -78,7 +79,21 @@ else:
             print('Gate is still closed')  # add return -1 because gate is closed yet alarm is not sounded
     else:  # if owner is not home
         sendEmail.run()
-        print('Alarm bajaidiyo')  # add return 1
+        print("Owner is not home.")
+        rec.release()
+
+        rec = cv2.VideoCapture(0)
+        for x in range(10,0,-1):
+            print("Please leave in", x)
+            time.sleep(1)
+
+        ret, frame = rec.read()  # check if the person has left
+        try:
+            repeat = face_recognition.face_encodings(frame)
+            if face_recognition.compare_faces([repeat], unknown):
+                print("Alarm bajaidiyo")  # add return 1
+        except:
+             pass
 
 
 rec.release()
