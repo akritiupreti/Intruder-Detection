@@ -12,14 +12,14 @@ photos = os.listdir('faces')
 result = False
 name = ""
 unknown = []
-isHome = True
+isHome = False
 
 
 # when motion is detected, camera opens
 ret, frame = rec.read()
 detected = detect_mask.detect(frame)
 if detected:
-    for sec in range(5, 0, -1):
+    for sec in range(10, 0, -1):
         print("Please remove your mask/helmet in", sec)
         time.sleep(1)
 
