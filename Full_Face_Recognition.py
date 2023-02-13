@@ -25,6 +25,7 @@ if detected:
 
     rec = cv2.VideoCapture(0)
     ret, frame = rec.read()
+    time.sleep(3)
     detected = detect_mask.detect(frame)
 
     if detected:
