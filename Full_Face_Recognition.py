@@ -18,12 +18,10 @@ isHome = False
 ret, frame = rec.read()
 detected = detect_mask.detect(frame)
 if detected:
-    rec.release()
     for sec in range(5, 0, -1):
         print("Please remove your mask/helmet in", sec)
         time.sleep(1)
 
-    rec = cv2.VideoCapture(0)
     ret, frame = rec.read()
     time.sleep(3)
     detected = detect_mask.detect(frame)
