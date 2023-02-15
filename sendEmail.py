@@ -3,6 +3,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 import ssl
+import time
+
 
 def run():
     emails = []
@@ -22,7 +24,8 @@ def run():
 
     msg['Subject'] = 'INTRUDER ALERT!'
 
-    filename = 'intruder.jpg'
+    currTime = time.ctime()[11:-5]
+    filename = currTime
     attachment = open('intruder/intruder.jpg', 'rb')
 
     p = MIMEBase('application', 'octet-stream')
