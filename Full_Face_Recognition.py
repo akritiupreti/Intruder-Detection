@@ -4,7 +4,7 @@ import os
 import sendEmail
 import detect_mask
 import time
-
+from host import Host
 
 rec = cv2.VideoCapture(0)
 photos = os.listdir('faces')
@@ -12,7 +12,8 @@ photos = os.listdir('faces')
 result = False
 name = ""
 unknown = []
-isHome = False
+isHome = Host()
+isHome = isHome.getStatus()
 
 # when motion is detected, camera opens
 ret, frame = rec.read()
@@ -64,6 +65,7 @@ if result:
     print("Open gate")  # add return 0
 else:
     cv2.imwrite('intruder/intruder.jpg', frame)  # saves image in intruder folder for later use/to send via email
+    sendEmail.run(isHome)
     if isHome:  # if owner is home
         friendly = input('Do you know this person? (Y/N): ')
         if friendly.upper() == 'Y':
@@ -77,7 +79,6 @@ else:
         else:
             print('Gate is still closed')  # add return -1 because gate is closed yet alarm is not sounded
     else:  # if owner is not home
-        sendEmail.run()
         print("Owner is not home.")
         rec.release()
 
