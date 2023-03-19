@@ -4,11 +4,24 @@ from email.mime.base import MIMEBase
 from email import encoders
 import ssl
 import time
-import host
+from host import Host
 import datetime
 
 
-def run():
+def run(isHome, credentials):
+    currDate = str(datetime.date.today())
+    currTime = time.ctime()[11:-5]
+    filename = currDate + "_" + currTime
+    attachment = open('intruder/intruder.jpg', 'rb')
+    
+    if isHome:
+        obj = credentials
+        obj.run(attachment, filename + ".jpg")
+        return
+    
+    obj = credentials
+    obj.run(attachment, filename + ".jpg")
+    
     emails = []
 
     f = open("email/emails.txt", "r")
@@ -25,13 +38,6 @@ def run():
     msg['From'] = from_address
 
     msg['Subject'] = 'INTRUDER ALERT!'
-
-    currDate = str(datetime.date.today())
-    currTime = time.ctime()[11:-5]
-    filename = currDate + "_" + currTime
-
-    attachment = open('intruder/intruder.jpg', 'rb')
-    host.run(attachment, filename+".jpg")
 
     p = MIMEBase('application', 'octet-stream')
 

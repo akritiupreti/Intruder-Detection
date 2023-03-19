@@ -1,7 +1,4 @@
-import paramiko
-import socket
 from ftplib import FTP
-import datetime
 import os
 
 
