@@ -12,8 +12,11 @@ photos = os.listdir('faces')
 result = False
 name = ""
 unknown = []
+print('connecting to server')
 isHome = Host()
+print("connected\nFetching status")
 isHome = isHome.getStatus()
+print("Done!")
 
 # when motion is detected, camera opens
 ret, frame = rec.read()
@@ -30,6 +33,7 @@ if detected:
     if detected:
         print("Alarm bajaidyo")  # after making the code into a function so that main.py can import, add 'return 1' here to sound the alarm
         quit()  # remove this after adding return 1
+
 
 while len(unknown) == 0:
     ret, frame = rec.read()

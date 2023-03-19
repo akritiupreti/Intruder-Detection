@@ -14,8 +14,13 @@ def detect(frame):
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
+
+    #labels = [['with_helmet', 'with_mask', 'without_mask']]
+    #y_classes = predictions.argmax(axis=-1)
+    #label = sorted(labels)[y_classes]
     confidence = np.max(score)*100
-    if confidence >= 99.9:
+    #print(confidence, label)
+    if confidence >= 95:
         return True
 
     return False
@@ -23,4 +28,6 @@ def detect(frame):
 
 if __name__ == '__main__':
     pass
+    #img = cv2.imread('face images/without_mask/maksssksksss51.png')
+    #print(detect(img))
 

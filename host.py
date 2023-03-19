@@ -1,5 +1,4 @@
 from ftplib import FTP
-import os
 
 
 class Host:
