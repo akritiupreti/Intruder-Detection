@@ -1,38 +1,28 @@
-import cv2
-import face_recognition
-import os
+from gpiozero import MotionSensor
+from gpiozero import Buzzer
+from host import Host
+import Full_Face_Recognition
 
-rec = cv2.VideoCapture(0)
-photos = os.listdir('faces')
+pir = MotionSensor(4)
+buzz = Buzzer(15)
 
-result = False
-name = ""
-unknown = []
+credentials = Host()
+isHome = credentials.getStatus()
 
-#when motion is detected, camera opens
-while len(unknown) == 0:
-    ret, frame = rec.read()
-    try:    #if no face is detected after camera opens, keep camera ON
-        unknown = face_recognition.face_encodings(frame)[0] #when face is detected, unknown is not empty, so loop ends
-    except:
-        pass
-
-
-for photo in photos:
-    img = cv2.imread('faces/'+photo)
-    known = face_recognition.face_encodings(img)[0]
-
-    result = face_recognition.compare_faces([known], unknown)[0]
-
-    if result:
-        name = photo[:-4]
-        break
-
-
-if result:
-    print('Hello ' + name + '!')
-else:
-    print('ALARM BAJAIDIYO')
-
-rec.release()
-cv2.destroyAllWindows()
+while True:
+    pir.wait_for_motion()
+    print("Motion detected!")
+    status = Full_Face_Recognition.run(isHome, credentials)
+    if status == 1:
+        print("INTRUDER")
+        buzz.beep(0.5,1)
+    elif status == 0:
+        print("Welcome")
+    else:
+        print("Gate is still closed")
+    
+    pir.wait_for_no_motion()
+    buzz.off()
+    print("Motion stopped")
+    isHome = credentials.getStatus()
+    

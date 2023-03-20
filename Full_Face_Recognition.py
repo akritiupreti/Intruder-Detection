@@ -12,11 +12,15 @@ photos = os.listdir('faces')
 result = False
 name = ""
 unknown = []
+print('connecting to server')
 isHome = Host()
+print("connected\nFetching status")
 isHome = isHome.getStatus()
+print("Done!")
 
 # when motion is detected, camera opens
-ret, frame = rec.read()
+#ret, frame = rec.read()
+'''
 detected = detect_mask.detect(frame)
 if detected:
     for sec in range(5, 0, -1):
@@ -30,6 +34,7 @@ if detected:
     if detected:
         print("Alarm bajaidyo")  # after making the code into a function so that main.py can import, add 'return 1' here to sound the alarm
         quit()  # remove this after adding return 1
+'''
 
 while len(unknown) == 0:
     ret, frame = rec.read()
@@ -65,8 +70,30 @@ if result:
     print("Open gate")  # add return 0
 else:
     cv2.imwrite('intruder/intruder.jpg', frame)  # saves image in intruder folder for later use/to send via email
-    sendEmail.run(isHome)
+    flag, name = sendEmail.run(isHome)
     if isHome:  # if owner is home
+        '''
+        -------------------------------/// Code for PI ///----------------------------------
+        if flag == "00":
+            return -1
+        elif flag == "10":
+            return 0
+        else:
+            new_name = "faces/" + name + ".jpg"
+            cv2.imwrite(new_name, frame)
+            return 0
+        -------------------------------/// Code for PI ///----------------------------------
+        '''
+        if flag == "00":
+            print("Gate is still closed")
+        elif flag == "10":
+            print("Open gate")
+        else:
+            new_name = "faces/" + name + ".jpg"
+            cv2.imwrite(new_name, frame)
+            print("Face registered! Open gate")
+
+        '''
         friendly = input('Do you know this person? (Y/N): ')
         if friendly.upper() == 'Y':
             answer = input('Do you want to register this person? (Y/N): ')
@@ -78,6 +105,7 @@ else:
             print('Open gate')  # add return 0
         else:
             print('Gate is still closed')  # add return -1 because gate is closed yet alarm is not sounded
+        '''
     else:  # if owner is not home
         print("Owner is not home.")
         rec.release()
