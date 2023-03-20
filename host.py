@@ -18,16 +18,17 @@ class Host:
             return False
 
     def getFlag(self):
+        print("Fetching status")
         files = self.ftp.nlst()
-        while True:  # wait for user to configure settings in app
-            if "incomplete.txt" in files:
-                files = self.ftp.nlst()
-                time.sleep(5)
-            else:
-                break
+        print(files)
+        # wait for user to configure settings in app
+        while "incomplete.txt" in files:
+            print("Still incomplete")
+            files = self.ftp.nlst()
+            time.sleep(5)
 
         self.ftp.rename("complete.txt", "incomplete.txt")
-
+        print("Fetched!")
         if "00.txt" in files:
             return "00"
         elif "01.txt" in files:

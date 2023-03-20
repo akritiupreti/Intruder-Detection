@@ -61,7 +61,7 @@ def run(isHome, credentials):
                 print("Open gate")
                 return 0
             else:
-                new_name = "faces/" + name + ".jpg"
+                new_name = "faces/" + name[:-4] + ".jpg"
                 cv2.imwrite(new_name, frame)
                 print("Face registered! Open gate")
                 return 0

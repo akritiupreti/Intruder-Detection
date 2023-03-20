@@ -49,7 +49,6 @@ while len(unknown) == 0:
 
 
 cv2.imshow('Face', frame)  # Display face of person in camera
-time.sleep(5)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
@@ -89,23 +88,10 @@ else:
         elif flag == "10":
             print("Open gate")
         else:
-            new_name = "faces/" + name + ".jpg"
+            new_name = "faces/" + name[:-4] + ".jpg"
             cv2.imwrite(new_name, frame)
             print("Face registered! Open gate")
 
-        '''
-        friendly = input('Do you know this person? (Y/N): ')
-        if friendly.upper() == 'Y':
-            answer = input('Do you want to register this person? (Y/N): ')
-            if answer.upper() == 'Y':
-                new_name = input("Enter the person's name: ")
-                new_name = 'faces/' + new_name + '.jpg'
-                cv2.imwrite(new_name, frame)
-
-            print('Open gate')  # add return 0
-        else:
-            print('Gate is still closed')  # add return -1 because gate is closed yet alarm is not sounded
-        '''
     else:  # if owner is not home
         print("Owner is not home.")
         rec.release()
