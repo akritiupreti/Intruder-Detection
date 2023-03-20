@@ -13,14 +13,13 @@ def run(isHome, credentials):
     currTime = time.ctime()[11:-5]
     filename = currDate + "_" + currTime
     attachment = open('intruder/intruder.jpg', 'rb')
-    
-    if isHome:
-        obj = credentials
-        obj.run(attachment, filename + ".jpg")
-        return
-    
+
     obj = credentials
     obj.run(attachment, filename + ".jpg")
+    time.sleep(5)
+    flag, name = obj.getFlag()
+    if isHome:
+        return flag, name
     
     emails = []
 
@@ -59,6 +58,8 @@ def run(isHome, credentials):
         s.login(from_address, password)
         s.sendmail(from_address, email, text)
         s.quit()
+
+    return flag, name
 
 
 if __name__ == '__main__':

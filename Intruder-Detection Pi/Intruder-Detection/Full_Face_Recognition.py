@@ -4,7 +4,7 @@ import os
 import sendEmail
 #import detect_mask
 import time
-from host import Host
+#from host import Host
 
 
 def run(isHome, credentials):
@@ -28,7 +28,6 @@ def run(isHome, credentials):
         #if cv2.waitKey(1) & 0xFF == ord('q'):
         #    break
 
-
     cv2.imshow('Face', frame)  # Display face of person in camera
     time.sleep(5)
     cv2.waitKey(0)
@@ -45,7 +44,6 @@ def run(isHome, credentials):
             name = photo[:-4]
             break
 
-
     if result:
         print('Hello ' + name + '!')
         print("Open gate")  # add return 0
@@ -54,25 +52,20 @@ def run(isHome, credentials):
         return 0
     else:
         cv2.imwrite('intruder/intruder.jpg', frame)  # saves image in intruder folder for later use/to send via email
-        sendEmail.run(isHome, credentials)
+        flag, name = sendEmail.run(isHome, credentials)
         if isHome:  # if owner is home
-            friendly = input('Do you know this person? (Y/N): ')
-            if friendly.upper() == 'Y':
-                answer = input('Do you want to register this person? (Y/N): ')
-                if answer.upper() == 'Y':
-                    new_name = input("Enter the person's name: ")
-                    new_name = 'faces/' + new_name + '.jpg'
-                    cv2.imwrite(new_name, frame)
-
-                print('Open gate')  # add return 0
-                rec.release()
-                cv2.destroyAllWindows()
+            if flag == "00":
+                print("Gate is still closed")
+                return -1
+            elif flag == "10":
+                print("Open gate")
                 return 0
             else:
-                print('Gate is still closed')  # add return -1 because gate is closed yet alarm is not sounded
-                rec.release()
-                cv2.destroyAllWindows()
-                return -1
+                new_name = "faces/" + name + ".jpg"
+                cv2.imwrite(new_name, frame)
+                print("Face registered! Open gate")
+                return 0
+
         else:  # if owner is not home
             print("Owner is not home.")
             rec.release()
