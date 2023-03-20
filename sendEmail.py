@@ -14,13 +14,13 @@ def run(isHome):
     filename = currDate + "_" + currTime
     attachment = open('intruder/intruder.jpg', 'rb')
 
-    if isHome:
-        obj = Host()
-        obj.run(attachment, filename + ".jpg")
-        return
-
     obj = Host()
     obj.run(attachment, filename + ".jpg")
+    time.sleep(5)
+    flag, name = obj.getFlag()
+    if isHome:
+        return flag, name
+
     emails = []
     f = open("email/emails.txt", "r")
     for line in f:
@@ -58,6 +58,8 @@ def run(isHome):
         s.login(from_address, password)
         s.sendmail(from_address, email, text)
         s.quit()
+
+    return flag, name
 
 
 if __name__ == '__main__':
