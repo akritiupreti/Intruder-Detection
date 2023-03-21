@@ -9,11 +9,12 @@ class Host:
         self.port = 21
         print("Connecting to server...")
         self.ftp.connect(self.server, self.port)
-        self.ftp.login("epiz_33608356", "HwGN8xvq7ut")
+        self.ftp.login("epiz_33843178", "QOMgsUul412mh")
         print("Connected!")
 
     def getStatus(self):
         print("Getting status...")
+        self.ftp.cwd('/htdocs')
         files = self.ftp.nlst()
         print("Done!")
         if "on.txt" in files:
@@ -22,13 +23,12 @@ class Host:
             return False
 
     def getFlag(self):
+        self.ftp.cwd('/htdocs')
         files = self.ftp.nlst()
-        while True:  # wait for user to configure settings in app
-            if "incomplete.txt" in files:
-                files = self.ftp.nlst()
-                time.sleep(5)
-            else:
-                break
+        # wait for user to configure settings in app
+        while "incomplete.txt" in files:
+            files = self.ftp.nlst()
+            time.sleep(5)
 
         self.ftp.rename("complete.txt", "incomplete.txt")
 
@@ -44,9 +44,7 @@ class Host:
             return "11", name
 
     def run(self, file, filename):
-        files = self.ftp.nlst() #list of files on the server
-        #print(files)
-
+        self.ftp.cwd('/htdocs/photos')
         filename = filename.replace(":", ".")
         r = self.ftp.storbinary('STOR %s' % filename, file)
         #print(r)  # should be: 226 Transfer OK
