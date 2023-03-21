@@ -2,7 +2,7 @@ import cv2
 import face_recognition
 import os
 import sendEmail
-import detect_mask
+#import detect_mask
 import time
 from host import Host
 
@@ -49,7 +49,6 @@ while len(unknown) == 0:
 
 
 cv2.imshow('Face', frame)  # Display face of person in camera
-time.sleep(5)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
@@ -89,7 +88,7 @@ else:
         elif flag == "10":
             print("Open gate")
         else:
-            new_name = "faces/" + name + ".jpg"
+            new_name = "faces/" + name[:-4] + ".jpg"
             cv2.imwrite(new_name, frame)
             print("Face registered! Open gate")
 
