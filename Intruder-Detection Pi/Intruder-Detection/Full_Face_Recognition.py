@@ -23,13 +23,14 @@ def run(isHome, credentials):
             unknown = face_recognition.face_encodings(frame)[0] # when face is detected, unknown is not empty, so loop ends
             print("face detected")
         except:
-            time.sleep(3)
+            #pass
+            print("face not found")
+            #time.sleep(3)
 
         #if cv2.waitKey(1) & 0xFF == ord('q'):
         #    break
 
     cv2.imshow('Face', frame)  # Display face of person in camera
-    time.sleep(5)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -84,7 +85,7 @@ def run(isHome, credentials):
                     cv2.destroyAllWindows()
                     return 1
             except:
-                 pass
+                 return 0
 
 
     rec.release()

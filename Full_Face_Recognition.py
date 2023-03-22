@@ -12,11 +12,8 @@ photos = os.listdir('faces')
 result = False
 name = ""
 unknown = []
-print('connecting to server')
 isHome = Host()
-print("connected\nFetching status")
 isHome = isHome.getStatus()
-print("Done!")
 
 # when motion is detected, camera opens
 #ret, frame = rec.read()
