@@ -2,6 +2,7 @@ from gpiozero import MotionSensor
 from gpiozero import Buzzer
 from host import Host
 import Full_Face_Recognition
+import time
 
 pir = MotionSensor(4)
 buzz = Buzzer(15)
@@ -15,7 +16,8 @@ while True:
     status = Full_Face_Recognition.run(isHome, credentials)
     if status == 1:
         print("INTRUDER")
-        buzz.beep(0.5,1)
+        buzz.beep(0.2,1)
+        time.sleep(3)
     elif status == 0:
         print("Welcome")
     else:
