@@ -7,12 +7,16 @@ class Host:
         self.ftp = FTP()
         self.server = "ftp.epizy.com"
         self.port = 21
+        print("Connecting to server...")
         self.ftp.connect(self.server, self.port)
         self.ftp.login("epiz_33843178", "QOMgsUul412mh")
+        print("Connected!")
 
     def getStatus(self):
+        print("Getting owner status...")
         self.ftp.cwd('/htdocs')
         files = self.ftp.nlst()
+        print("Done!")
         if "on.txt" in files:
             return True
         else:
@@ -20,21 +24,21 @@ class Host:
 
     def getFlag(self):
         self.ftp.cwd('/htdocs')
-        print("Fetching status")
+        print("Fetching status...")
         files = self.ftp.nlst()
-        print(files)
+        #print(files)
         # wait for user to configure settings in app
         while "incomplete.txt" in files:
-            print("Still incomplete")
+            print("Waiting for owner's response...")
             files = self.ftp.nlst()
             time.sleep(5)
 
         self.ftp.rename("complete.txt", "incomplete.txt")
         print("Fetched!")
         if "00.txt" in files:
-            return "00"
-        elif "01.txt" in files:
-            return "01"
+            return "00", None
+        elif "10.txt" in files:
+            return "10", None
         else:
             name = None
             for file in files:
@@ -43,8 +47,6 @@ class Host:
             return "11", name
 
     def run(self, file, filename):
-        #files = self.ftp.nlst() #list of files on the server
-        #print(files)
         self.ftp.cwd('/htdocs/photos')
         filename = filename.replace(":", ".")
         r = self.ftp.storbinary('STOR %s' % filename, file)

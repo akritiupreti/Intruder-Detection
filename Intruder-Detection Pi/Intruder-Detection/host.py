@@ -24,18 +24,20 @@ class Host:
 
     def getFlag(self):
         self.ftp.cwd('/htdocs')
+        print("Fetching status...")
         files = self.ftp.nlst()
         # wait for user to configure settings in app
         while "incomplete.txt" in files:
+            print("Waiting for owner's response...")
             files = self.ftp.nlst()
             time.sleep(5)
 
         self.ftp.rename("complete.txt", "incomplete.txt")
-
+        print("Fetched!")
         if "00.txt" in files:
-            return "00"
-        elif "01.txt" in files:
-            return "01"
+            return "00", None
+        elif "10.txt" in files:
+            return "10", None
         else:
             name = None
             for file in files:
@@ -48,8 +50,6 @@ class Host:
         filename = filename.replace(":", ".")
         r = self.ftp.storbinary('STOR %s' % filename, file)
         #print(r)  # should be: 226 Transfer OK
-
-        #self.ftp.quit()
 
     def closeConnection(self):
         self.ftp.quit()
