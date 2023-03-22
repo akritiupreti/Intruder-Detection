@@ -17,8 +17,8 @@ def run(isHome):
     obj = Host()
     obj.run(attachment, filename + ".jpg")
     time.sleep(5)
-    flag, name = obj.getFlag()
     if isHome:
+        flag, name = obj.getFlag()
         return flag, name
 
     emails = []
@@ -59,7 +59,7 @@ def run(isHome):
         s.sendmail(from_address, email, text)
         s.quit()
 
-    return flag, name
+    return None, None
 
 
 if __name__ == '__main__':
