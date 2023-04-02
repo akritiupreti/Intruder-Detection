@@ -21,21 +21,22 @@ def run(isHome, credentials):
         ret, frame = rec.read()
         try:    # if no face is detected after camera opens, keep camera ON
             unknown = face_recognition.face_encodings(frame)[0] # when face is detected, unknown is not empty, so loop ends
-            print("face detected")
+            print("Face detected")
         except:
             #pass
-            print("face not found")
+            print("Face not found")
             #time.sleep(3)
 
         #if cv2.waitKey(1) & 0xFF == ord('q'):
         #    break
 
-    cv2.imshow('Face', frame)  # Display face of person in camera
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow('Face', frame)  # Display face of person in camera
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
     # now, compare the unknown face with the registered known faces
     for photo in photos:
+        print("Recognizing face...")
         img = cv2.imread('faces/'+photo)
         known = face_recognition.face_encodings(img)[0]
 
@@ -47,24 +48,22 @@ def run(isHome, credentials):
 
     if result:
         print('Hello ' + name + '!')
-        print("Open gate")  # add return 0
         rec.release()
         cv2.destroyAllWindows()
         return 0
     else:
+        print("Face not recognized!")
         cv2.imwrite('intruder/intruder.jpg', frame)  # saves image in intruder folder for later use/to send via email
         flag, name = sendEmail.run(isHome, credentials)
         if isHome:  # if owner is home
             if flag == "00":
-                print("Gate is still closed")
                 return -1
             elif flag == "10":
-                print("Open gate")
                 return 0
             else:
                 new_name = "faces/" + name[:-4] + ".jpg"
                 cv2.imwrite(new_name, frame)
-                print("Face registered! Open gate")
+                print("Face registered!\nHello", name[:-4], "!")
                 return 0
 
         else:  # if owner is not home
@@ -80,18 +79,17 @@ def run(isHome, credentials):
             try:
                 repeat = face_recognition.face_encodings(frame)
                 if face_recognition.compare_faces([repeat], unknown):
-                    print("Alarm bajaidiyo")  # add return 1
                     rec.release()
                     cv2.destroyAllWindows()
                     return 1
             except:
-                 return 0
-
+                 return -1
 
     rec.release()
     cv2.destroyAllWindows()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     #isHome = Host()
     #isHome = isHome.getStatus()
     #print("Done!")
