@@ -8,13 +8,13 @@ from host import Host
 import datetime
 
 
-def run(isHome):
+def run(isHome, credentials):
     currDate = str(datetime.date.today())
     currTime = time.ctime()[11:-5]
     filename = currDate + "_" + currTime
     attachment = open('intruder/intruder.jpg', 'rb')
 
-    obj = Host()
+    obj = credentials
     obj.run(attachment, filename + ".jpg")
     time.sleep(5)
     if isHome:
